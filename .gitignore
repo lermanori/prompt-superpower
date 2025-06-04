@@ -37,6 +37,3 @@ Thumbs.db
 backend/uploads/
 backend/src/db/*.json
 !backend/src/db/users.json
-
-# Backend specific
-backend/src/db/*.json 

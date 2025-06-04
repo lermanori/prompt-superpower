@@ -17,6 +17,8 @@ const EditProject = () => {
 
   const getToken = () => localStorage.getItem('token');
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     const fetchProjectData = async () => {
       setIsLoading(true);
@@ -30,10 +32,10 @@ const EditProject = () => {
       try {
         // Fetch project details and images in parallel
         const [projectRes, imagesRes] = await Promise.all([
-          axios.get(`http://localhost:3001/api/projects/${projectId}`, {
+          axios.get(`${API_BASE_URL}/api/projects/${projectId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get(`http://localhost:3001/api/projects/${projectId}/images`, {
+          axios.get(`${API_BASE_URL}/api/projects/${projectId}/images`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -127,7 +129,7 @@ const EditProject = () => {
 
      try {
         // 1. Update core project details
-        await axios.put(`http://localhost:3001/api/projects/${projectId}`, 
+        await axios.put(`${API_BASE_URL}/api/projects/${projectId}`, 
           { name, description, brief },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -160,7 +162,7 @@ const EditProject = () => {
      try {
        // Call the existing generate-prompts endpoint
        const response = await axios.post(
-         `http://localhost:3001/api/projects/${projectId}/generate-prompts`,
+         `${API_BASE_URL}/api/projects/${projectId}/generate-prompts`,
          {},
          {
            headers: {

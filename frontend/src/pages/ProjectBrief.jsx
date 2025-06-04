@@ -13,6 +13,8 @@ const ProjectBrief = () => {
 
   const getToken = () => localStorage.getItem('token');
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const currentImageCount = images.length;
@@ -61,7 +63,7 @@ const ProjectBrief = () => {
       const token = getToken();
       if (!token) throw new Error('Authentication token not found.');
 
-      const projectResponse = await axios.post('http://localhost:3001/api/projects', {
+      const projectResponse = await axios.post(`${API_BASE_URL}/api/projects`, {
         name,
         description,
         brief
@@ -80,7 +82,7 @@ const ProjectBrief = () => {
       );
       formData.append('tags', JSON.stringify(tagsArray));
 
-      await axios.post(`http://localhost:3001/api/projects/${projectId}/images`, formData, {
+      await axios.post(`${API_BASE_URL}/api/projects/${projectId}/images`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -88,7 +90,7 @@ const ProjectBrief = () => {
       });
 
       await axios.post(
-        `http://localhost:3001/api/projects/${projectId}/generate-prompts`,
+        `${API_BASE_URL}/api/projects/${projectId}/generate-prompts`,
         {},
         {
           headers: {

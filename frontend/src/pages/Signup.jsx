@@ -23,6 +23,8 @@ const Signup = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -39,7 +41,7 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/register', {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
         email,
         password,
       });

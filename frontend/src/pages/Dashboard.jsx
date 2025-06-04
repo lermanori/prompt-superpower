@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
@@ -20,7 +22,7 @@ const Dashboard = () => {
           navigate('/login');
           return;
         }
-        const response = await axios.get('http://localhost:3001/api/projects', {
+        const response = await axios.get(`${API_BASE_URL}/api/projects`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProjects(response.data);
@@ -61,7 +63,7 @@ const Dashboard = () => {
     setError(null);
     try {
       const token = getToken();
-      await axios.delete(`http://localhost:3001/api/projects/${projectId}`, {
+      await axios.delete(`${API_BASE_URL}/api/projects/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProjects(prevProjects => prevProjects.filter(p => p.id !== projectId));

@@ -24,6 +24,8 @@ const Prompts = () => {
 
   const getToken = () => localStorage.getItem('token');
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   // Fetch prompts
   useEffect(() => {
     const fetchPrompts = async () => {
@@ -33,7 +35,7 @@ const Prompts = () => {
       try {
         const token = getToken();
         if (!token) throw new Error('No auth token found');
-        const response = await axios.get(`http://localhost:3001/api/projects/${projectId}/prompts`, {
+        const response = await axios.get(`${API_BASE_URL}/api/projects/${projectId}/prompts`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setPrompts(response.data);
@@ -60,7 +62,7 @@ const Prompts = () => {
     setError(null);
     try {
       const token = getToken();
-      await axios.put(`http://localhost:3001/api/projects/${projectId}/prompts/${id}`, 
+      await axios.put(`${API_BASE_URL}/api/projects/${projectId}/prompts/${id}`, 
         { isFavorite: newIsFavorite },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -93,7 +95,7 @@ const Prompts = () => {
 
     try {
       const token = getToken();
-      await axios.put(`http://localhost:3001/api/projects/${projectId}/prompts/${id}`, 
+      await axios.put(`${API_BASE_URL}/api/projects/${projectId}/prompts/${id}`, 
         { content: editContent },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -116,7 +118,7 @@ const Prompts = () => {
 
     try {
       const token = getToken();
-      await axios.delete(`http://localhost:3001/api/projects/${projectId}/prompts/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/projects/${projectId}/prompts/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
     } catch (err) {
@@ -184,7 +186,7 @@ const Prompts = () => {
     try {
       // Make the actual API call to the backend
       const response = await axios.post(
-        `http://localhost:3001/api/projects/${projectId}/generate-images`,
+        `${API_BASE_URL}/api/projects/${projectId}/generate-images`,
         { 
           modelId: selectedModel, 
           prompts: promptsToGenerate.map(p => p.content)

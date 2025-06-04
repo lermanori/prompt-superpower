@@ -18,6 +18,8 @@ const Results = () => {
 
   const getToken = () => localStorage.getItem('token');
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     const fetchData = async () => { // Renamed function
       setIsLoading(true);
@@ -32,10 +34,10 @@ const Results = () => {
         console.log(`[ResultsPage] Fetching data for projectId: ${projectId}`);
         // Fetch project details and results in parallel
         const [projectDetailsRes, resultsRes] = await Promise.all([
-          axios.get(`http://localhost:3001/api/projects/${projectId}`, { // Fetch project details
+          axios.get(`${API_BASE_URL}/api/projects/${projectId}`, { // Fetch project details
              headers: { Authorization: `Bearer ${token}` }
           }),
-          axios.get(`http://localhost:3001/api/projects/${projectId}/results`, {
+          axios.get(`${API_BASE_URL}/api/projects/${projectId}/results`, {
              headers: { Authorization: `Bearer ${token}` }
           })
         ]);
@@ -75,7 +77,7 @@ const Results = () => {
     try {
       const token = getToken();
       await axios.put(
-        `http://localhost:3001/api/projects/${projectId}/results/${resultId}`,
+        `${API_BASE_URL}/api/projects/${projectId}/results/${resultId}`,
         { isFavorite: newIsFavorite }, // Send the new favorite status
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -114,7 +116,7 @@ const Results = () => {
     setError(null);
     setDownloading(prev => ({ ...prev, [resultId]: true })); // Set loading for this specific button
 
-    const fullImageUrl = `http://localhost:3001${imageUrl}`;
+    const fullImageUrl = `${API_BASE_URL}${imageUrl}`;
     console.log(`[Download] Fetching image: ${fullImageUrl}`);
 
     try {
@@ -164,7 +166,7 @@ const Results = () => {
       }
       setError(null); // Clear previous errors
       
-      const exportUrl = `http://localhost:3001/api/projects/${projectId}/export`;
+      const exportUrl = `${API_BASE_URL}/api/projects/${projectId}/export`;
       console.log('Requesting export from URL:', exportUrl);
 
       try {
@@ -269,7 +271,7 @@ const Results = () => {
                     key={result.id} 
                     className={`bg-white rounded-lg shadow-md overflow-hidden flex flex-col border-2 ${isSelected ? 'border-blue-500' : 'border-transparent'}`}>
                   {/* Use result.imageUrl which points to the backend-served image */}
-                  <img src={`http://localhost:3001${result.imageUrl}`} 
+                  <img src={`${API_BASE_URL}${result.imageUrl}`} 
                        alt={result.prompt}
                        className="w-full h-64 object-cover bg-gray-200" // Added bg color
                        onError={(e) => { e.target.style.display = 'none'; /* Hide if image fails */ }} />

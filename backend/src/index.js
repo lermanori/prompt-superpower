@@ -14,7 +14,20 @@ const PORT = process.env.PORT || 3001;
 const USERS_FILE = 'users';
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow requests with no origin
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 app.use(express.json());
 // Serve static files from the main 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
